@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+cohere
+google-generativeai
+numpy
+python-dotenv
+jinja2
+pickle-mixin
+logging
+starlette
