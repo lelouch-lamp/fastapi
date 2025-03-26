@@ -21,7 +21,6 @@ logging.basicConfig(level=logging.DEBUG)
 COHERE_API_KEY = os.getenv("COHERE_API_KEY")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-
 if not COHERE_API_KEY or not GEMINI_API_KEY:
     raise ValueError("API keys are missing. Set them as environment variables.")
 
@@ -41,7 +40,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve static files
+# Ensure 'static' directory exists before mounting
+if not os.path.exists("static"):
+    os.makedirs("static")
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Load templates
@@ -136,7 +138,14 @@ def search_and_analyze(
     
     logging.debug(f"Returning search results for query: {query}")
     return {
-    "query": query,
-    "results": search_results,  # Include actual search results
-    "analysis": analysis
-}
+        "query": query,
+        "results": search_results,  # Include actual search results
+        "analysis": analysis
+    }
+
+# Ensure FastAPI binds to 0.0.0.0 and uses Render's PORT
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))  # Default to 8000 if PORT is not set
+    logging.info(f"Starting FastAPI on port {port}")
+    uvicorn.run(app, host="0.0.0.0", port=port)
