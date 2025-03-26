@@ -146,6 +146,5 @@ def search_and_analyze(
 # Ensure FastAPI binds to 0.0.0.0 and uses Render's PORT
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.environ.get("PORT", 8080))  # Default to 8000 if PORT is not set
     logging.info(f"Starting FastAPI on port {port}")
     uvicorn.run(app, host="0.0.0.0", port=8080)
